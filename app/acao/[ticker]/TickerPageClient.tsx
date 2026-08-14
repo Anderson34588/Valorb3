@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { BarChart2, ArrowLeft, AlertCircle, RefreshCw, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import { AuthButton } from '@/components/AuthButton';
+import { WatchlistButton } from '@/components/WatchlistButton';
 import { StockHeader } from '@/components/valuation/StockHeader';
 import { FundamentalsGrid } from '@/components/valuation/FundamentalsGrid';
 import { ValuationPanel } from '@/components/valuation/ValuationPanel';
@@ -97,19 +99,23 @@ export function TickerPageClient({ ticker }: Props) {
             </span>
           </nav>
 
-          {/* Search hint */}
-          <Link
-            href="/"
-            className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-all hover:opacity-80"
-            style={{
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid var(--border-subtle)',
-              color: 'var(--text-tertiary)',
-            }}
-          >
-            <span>Buscar outro ticker</span>
-            <ExternalLink size={11} />
-          </Link>
+          <div className="flex items-center gap-2">
+            <WatchlistButton ticker={ticker.toUpperCase()} />
+            {/* Search hint */}
+            <Link
+              href="/"
+              className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid var(--border-subtle)',
+                color: 'var(--text-tertiary)',
+              }}
+            >
+              <span>Buscar outro ticker</span>
+              <ExternalLink size={11} />
+            </Link>
+            <AuthButton />
+          </div>
         </div>
       </header>
 

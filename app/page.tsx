@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { BarChart2 } from 'lucide-react';
 import { StockSearch } from '@/components/valuation/StockSearch';
+import { AuthButton } from '@/components/AuthButton';
 
 // Tickers populares — links estáticos ajudam o Google a indexar as páginas
 const POPULAR_TICKERS = [
@@ -59,9 +60,42 @@ export default function Home() {
               <span style={{ color: 'var(--text-primary)' }}>B3</span>
             </span>
           </div>
-          <span className="text-xs mono" style={{ color: 'var(--text-tertiary)' }}>
-            Valuation de Ações
-          </span>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/planos"
+              className="hidden sm:flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+              style={{
+                background: 'rgba(0,212,255,0.1)',
+                border: '1px solid rgba(0,212,255,0.3)',
+                color: 'var(--accent-cyan)',
+              }}
+            >
+              ✦ Planos
+            </Link>
+            <Link
+              href="/filtrar"
+              className="hidden sm:flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid var(--border-subtle)',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              Filtrar Ações
+            </Link>
+            <Link
+              href="/minha-lista"
+              className="hidden sm:flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-all hover:opacity-80"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid var(--border-subtle)',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              Minha Lista
+            </Link>
+            <AuthButton />
+          </div>
         </div>
       </header>
 
