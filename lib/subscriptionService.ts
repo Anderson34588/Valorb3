@@ -58,7 +58,7 @@ export async function createCheckoutSession(su: SessionUser, returnUrl: string):
       line_items: [{ price: PLAN_PRO.priceId, quantity: 1 }],
       success_url: `${returnUrl}/planos?status=sucesso`,
       cancel_url: `${returnUrl}/planos?status=cancelado`,
-      payment_method_types: ['card'],
+      payment_method_types: ['card', 'boleto', 'pix'],
       subscription_data: { metadata: { userId: su.openid } },
       metadata: { userId: su.openid },
       locale: 'pt-BR',

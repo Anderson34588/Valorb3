@@ -275,7 +275,7 @@ function PlanosContent() {
           <div className="flex flex-col gap-4">
             {[
               { q: 'Posso cancelar a qualquer momento?', a: 'Sim. Você pode cancelar pelo portal de faturamento e continua com acesso Pro até o fim do período pago.' },
-              { q: 'Quais formas de pagamento são aceitas?', a: 'Cartão de crédito e débito. O pagamento é processado com segurança pela Stripe.' },
+              { q: 'Quais formas de pagamento são aceitas?', a: 'Cartão de crédito/débito, Pix e boleto bancário. O pagamento é processado com segurança pela Stripe.' },
               { q: 'O plano gratuito continua funcionando?', a: 'Sim. Análise de ações, cotações e modelos Bazin/Graham são sempre gratuitos.' },
               { q: 'Os dados são em tempo real?', a: 'Cotações são atualizadas via Yahoo Finance. Indicadores fundamentalistas via Fundamentus (atualizam diariamente).' },
             ].map(({ q, a }) => (
@@ -287,10 +287,25 @@ function PlanosContent() {
           </div>
         </div>
 
-        {/* Disclaimer */}
-        <p className="text-xs text-center mt-10" style={{ color: 'var(--text-tertiary)' }}>
-          Pagamentos processados pela Stripe · Cancele quando quiser · Não é recomendação de investimento
-        </p>
+        {/* Métodos de pagamento + Disclaimer */}
+        <div className="mt-10 flex flex-col items-center gap-3">
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Aceitos:</span>
+            {[
+              { label: 'Pix', bg: '#32bcad', color: '#fff' },
+              { label: 'Cartão', bg: 'rgba(255,255,255,0.08)', color: 'var(--text-secondary)' },
+              { label: 'Boleto', bg: 'rgba(255,255,255,0.08)', color: 'var(--text-secondary)' },
+            ].map(({ label, bg, color }) => (
+              <span key={label} className="px-2.5 py-1 rounded-md text-xs font-semibold"
+                style={{ background: bg, color, border: '1px solid rgba(255,255,255,0.1)' }}>
+                {label}
+              </span>
+            ))}
+          </div>
+          <p className="text-xs text-center" style={{ color: 'var(--text-tertiary)' }}>
+            Pagamentos processados pela Stripe · Cancele quando quiser · Não é recomendação de investimento
+          </p>
+        </div>
       </main>
     </div>
   );
