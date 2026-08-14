@@ -6,6 +6,7 @@ import { BarChart2, ArrowLeft, AlertCircle, RefreshCw, ExternalLink } from 'luci
 import Link from 'next/link';
 import { AuthButton } from '@/components/AuthButton';
 import { WatchlistButton } from '@/components/WatchlistButton';
+import { PdfExportButton } from '@/components/PdfExportButton';
 import { StockHeader } from '@/components/valuation/StockHeader';
 import { FundamentalsGrid } from '@/components/valuation/FundamentalsGrid';
 import { ValuationPanel } from '@/components/valuation/ValuationPanel';
@@ -199,6 +200,18 @@ export function TickerPageClient({ ticker }: Props) {
         {!loading && stock && valuation && (
           <div className="flex flex-col gap-5">
             <StockHeader stock={stock} />
+
+            {/* Ações da análise */}
+            <div className="flex items-center gap-3 flex-wrap">
+              {pro && <PdfExportButton stock={stock} valuation={valuation} />}
+              {!pro && (
+                <Link href="/planos"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:opacity-80"
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-subtle)', color: 'var(--text-tertiary)' }}>
+                  🔒 Exportar PDF — apenas Pro
+                </Link>
+              )}
+            </div>
 
             {dataNote && (
               <div
