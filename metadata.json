@@ -1,0 +1,34 @@
+{
+  "title": "ValorB3",
+  "description": "Descubra o valor justo de qualquer ação, FII ou BDR da B3. Análise fundamentalista com Bazin, Graham, Múltiplos e DCF — dados em tempo real do Fundamentus e Yahoo Finance.",
+  "keywords": [
+    "valuation ações B3",
+    "valor justo ação",
+    "análise fundamentalista",
+    "Bazin",
+    "Graham",
+    "DCF fluxo de caixa descontado",
+    "P/L ação",
+    "ROE",
+    "dividend yield",
+    "FII análise",
+    "BDR valuation",
+    "investimentos Brasil"
+  ],
+  "alternates": {
+    "canonical": "https://valorb3.com.br"
+  },
+  "openGraph": {
+    "title": "ValorB3 — Valuation de Ações da B3",
+    "description": "Descubra o valor justo de qualquer ação, FII ou BDR da B3. Análise com Bazin, Graham, Múltiplos e DCF — dados em tempo real.",
+    "url": "https://valorb3.com.br",
+    "siteName": "ValorB3",
+    "locale": "pt_BR",
+    "type": "website"
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "ValorB3 — Valuation de Ações da B3",
+    "description": "Descubra o valor justo de qualquer ação, FII ou BDR da B3. Análise com Bazin, Graham, Múltiplos e DCF."
+  }
+}
