@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   BarChart2, ChevronUp, ChevronDown, ChevronsUpDown,
@@ -8,6 +9,7 @@ import {
 } from 'lucide-react';
 import { AuthButton } from '@/components/AuthButton';
 import { WatchlistButton } from '@/components/WatchlistButton';
+import { useSubscription } from '@/hooks/useSubscription';
 
 // ── Types ─────────────────────────────────────────────────────
 interface ScreenerRow {
@@ -90,6 +92,9 @@ function tipoLabel(t?: string | null) {
 
 // ── Componente principal ──────────────────────────────────────
 export default function FiltrarAcoesPage() {
+  const router = useRouter();
+  const { pro, loading: subLoading } = useSubscription();
+
   const [rows, setRows] = useState<ScreenerRow[]>([]);
   const [sectors, setSectors] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -98,6 +103,13 @@ export default function FiltrarAcoesPage() {
   const [sortKey, setSortKey] = useState<SortKey>('dy');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [showFilters, setShowFilters] = useState(false);
+
+  // Redireciona para /planos se não for Pro
+  useEffect(() => {
+    if (!subLoading && !pro) {
+      router.replace('/planos?motivo=pro');
+    }
+  }, [pro, subLoading, router]);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   const buildQuery = useCallback((f: Filters, sk: SortKey, sd: string) => {

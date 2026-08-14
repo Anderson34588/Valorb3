@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
 
 const PLANO_GRATIS_FEATURES = [
-  'Análise de qualquer ação, FII, ETF ou BDR',
+  '5 análises por dia (reset à meia-noite)',
   'Cotações em tempo real',
   'Modelos Bazin e Graham',
   'Últimos dividendos',
@@ -42,11 +42,14 @@ function PlanosContent() {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // Handle return from Stripe
+  // Handle return from Stripe or usage limit redirect
   useEffect(() => {
     const s = searchParams.get('status');
+    const motivo = searchParams.get('motivo');
     if (s === 'sucesso') setSuccessMsg('Assinatura ativada com sucesso! Bem-vindo ao Pro! 🎉');
     if (s === 'cancelado') setError('Pagamento cancelado. Você pode tentar novamente quando quiser.');
+    if (motivo === 'limite') setError('Você atingiu o limite de 5 análises gratuitas hoje. Assine o Pro para análises ilimitadas!');
+    if (motivo === 'pro') setError('Este recurso é exclusivo do plano Pro. Assine para desbloquear.');
   }, [searchParams]);
 
   const handleCheckout = async () => {
@@ -184,7 +187,7 @@ function PlanosContent() {
                 <span className="text-sm mb-1.5" style={{ color: 'var(--text-tertiary)' }}>/mês</span>
               </div>
               <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                Para começar a analisar ações da B3.
+                Até 5 análises por dia. Sem cartão.
               </p>
             </div>
 
@@ -276,7 +279,7 @@ function PlanosContent() {
             {[
               { q: 'Posso cancelar a qualquer momento?', a: 'Sim. Você pode cancelar pelo portal de faturamento e continua com acesso Pro até o fim do período pago.' },
               { q: 'Quais formas de pagamento são aceitas?', a: 'Cartão de crédito/débito, Pix e boleto bancário. O pagamento é processado com segurança pela Stripe.' },
-              { q: 'O plano gratuito continua funcionando?', a: 'Sim. Análise de ações, cotações e modelos Bazin/Graham são sempre gratuitos.' },
+              { q: 'O plano gratuito continua funcionando?', a: 'Sim. Você pode analisar até 5 ações por dia gratuitamente, com cotações em tempo real e modelos Bazin/Graham.' },
               { q: 'Os dados são em tempo real?', a: 'Cotações são atualizadas via Yahoo Finance. Indicadores fundamentalistas via Fundamentus (atualizam diariamente).' },
             ].map(({ q, a }) => (
               <div key={q} className="rounded-2xl p-4" style={{ background: 'var(--card)', border: '1px solid var(--border-subtle)' }}>

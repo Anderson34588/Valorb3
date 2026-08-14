@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { BarChart2, ArrowLeft, AlertCircle, RefreshCw, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { AuthButton } from '@/components/AuthButton';
@@ -12,12 +13,18 @@ import { PriceChart } from '@/components/valuation/PriceChart';
 import { DividendsCard } from '@/components/valuation/DividendsCard';
 import { DcfPanel } from '@/components/valuation/DcfPanel';
 import { calculateValuation, type StockData } from '@/lib/valuation';
+import { useSubscription } from '@/hooks/useSubscription';
+import { useUsageLimit } from '@/hooks/useUsageLimit';
 
 interface Props {
   ticker: string;
 }
 
 export function TickerPageClient({ ticker }: Props) {
+  const router = useRouter();
+  const { pro, loading: subLoading } = useSubscription();
+  const { consume } = useUsageLimit(pro);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [stock, setStock] = useState<StockData | null>(null);
@@ -49,9 +56,19 @@ export function TickerPageClient({ ticker }: Props) {
   };
 
   useEffect(() => {
+    // Aguarda resolver o status de assinatura antes de consumir
+    if (subLoading) return;
+
+    // Tenta consumir 1 uso; se retornar false → limite atingido → vai para /planos
+    const ok = consume();
+    if (!ok) {
+      router.replace('/planos?motivo=limite');
+      return;
+    }
+
     fetchStock();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ticker]);
+  }, [ticker, subLoading]);
 
   const valuation = stock ? calculateValuation(stock) : null;
 
