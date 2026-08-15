@@ -8,7 +8,8 @@ import { eq } from 'drizzle-orm';
 // Emails autorizados a acessar o painel de admin
 // Adicione o seu email do Google aqui ou em ADMIN_EMAILS no .env
 function isAdmin(email: string | null | undefined): boolean {
-  const raw = process.env.ADMIN_EMAILS ?? '';
+  // Aceita tanto ADMIN_EMAILS quanto E-MAILS_DO_ADMINISTRADOR (nome traduzido pela Vercel)
+  const raw = process.env.ADMIN_EMAILS ?? process.env['E-MAILS_DO_ADMINISTRADOR'] ?? '';
   const list = raw.split(',').map((e) => e.trim().toLowerCase()).filter(Boolean);
   return list.includes((email ?? '').toLowerCase());
 }
