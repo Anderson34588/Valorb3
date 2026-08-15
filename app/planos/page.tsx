@@ -41,6 +41,7 @@ function PlanosContent() {
   const [portalLoading, setPortalLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [anual, setAnual] = useState(false);
 
   // Handle return from Stripe or usage limit redirect
   useEffect(() => {
@@ -57,7 +58,11 @@ function PlanosContent() {
     setCheckoutLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/checkout', { method: 'POST' });
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ period: anual ? 'yearly' : 'monthly' }),
+      });
       const data = await res.json();
       if (data.error === 'payments_not_configured') {
         setError('Pagamentos ainda não configurados. Entre em contato com o administrador.');
@@ -130,6 +135,31 @@ function PlanosContent() {
           <p className="text-base max-w-xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
             Comece gratuitamente. Faça upgrade para o Pro e desbloqueie todas as ferramentas de análise.
           </p>
+
+          {/* Toggle mensal / anual */}
+          <div className="inline-flex items-center gap-3 mt-6 p-1 rounded-full"
+            style={{ background: 'var(--card)', border: '1px solid var(--border-subtle)' }}>
+            <button onClick={() => setAnual(false)}
+              className="px-4 py-1.5 rounded-full text-sm font-semibold transition-all"
+              style={{
+                background: !anual ? 'var(--gradient-accent)' : 'transparent',
+                color: !anual ? '#050505' : 'var(--text-secondary)',
+              }}>
+              Mensal
+            </button>
+            <button onClick={() => setAnual(true)}
+              className="px-4 py-1.5 rounded-full text-sm font-semibold transition-all flex items-center gap-2"
+              style={{
+                background: anual ? 'var(--gradient-accent)' : 'transparent',
+                color: anual ? '#050505' : 'var(--text-secondary)',
+              }}>
+              Anual
+              <span className="text-xs px-2 py-0.5 rounded-full font-bold"
+                style={{ background: anual ? 'rgba(0,0,0,0.2)' : 'rgba(0,255,136,0.15)', color: anual ? '#050505' : 'var(--accent-green)' }}>
+                -30%
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* Alerts */}
@@ -221,10 +251,21 @@ function PlanosContent() {
                 Pro
               </p>
               <div className="flex items-end gap-1">
-                <span className="text-4xl font-bold" style={{ letterSpacing: '-0.04em' }}>R$ 49</span>
-                <span className="text-xl font-bold mb-0.5" style={{ letterSpacing: '-0.02em' }}>,90</span>
-                <span className="text-sm mb-1.5" style={{ color: 'var(--text-tertiary)' }}>/mês</span>
+                <span className="text-4xl font-bold" style={{ letterSpacing: '-0.04em' }}>
+                  R$ {anual ? '13' : '19'}
+                </span>
+                <span className="text-xl font-bold mb-0.5" style={{ letterSpacing: '-0.02em' }}>
+                  {anual ? ',90' : ',90'}
+                </span>
+                <span className="text-sm mb-1.5" style={{ color: 'var(--text-tertiary)' }}>
+                  {anual ? '/mês · cobrado anualmente' : '/mês'}
+                </span>
               </div>
+              {anual && (
+                <p className="text-xs mt-1" style={{ color: 'var(--accent-green)' }}>
+                  R$ 166,80/ano · economize R$ 71,88 vs mensal
+                </p>
+              )}
               <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
                 Todas as ferramentas para análise profissional.
               </p>

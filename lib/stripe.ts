@@ -25,10 +25,12 @@ export function getStripe(): Stripe {
 // ── Plan config ────────────────────────────────────────────────
 export const PLAN_PRO = {
   name: 'ValorB3 Pro',
-  priceMonthly: 4990,          // centavos = R$ 49,90
+  priceMonthly: 1990,           // centavos = R$ 19,90/mês
+  priceYearly: 16680,           // centavos = R$ 166,80/ano (R$ 13,90 × 12)
   currency: 'brl',
-  // Set STRIPE_PRICE_ID_PRO_MONTHLY in env after creating the price in Stripe dashboard
+  // Set these in env after creating the prices in Stripe dashboard
   priceId: process.env.STRIPE_PRICE_ID_PRO_MONTHLY ?? '',
+  priceIdYearly: process.env.STRIPE_PRICE_ID_PRO_YEARLY ?? '',
 } as const;
 
 export const ACTIVE_STATUSES = new Set(['active', 'trialing']);

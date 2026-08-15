@@ -13,8 +13,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const body = await req.json().catch(() => ({}));
+    const period = body?.period === 'yearly' ? 'yearly' : 'monthly';
     const origin = req.nextUrl.origin;
-    const url = await createCheckoutSession(user, origin);
+    const url = await createCheckoutSession(user, origin, period);
     return Response.json({ url });
   } catch (err) {
     console.error('[checkout]', err);

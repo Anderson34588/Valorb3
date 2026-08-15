@@ -47,23 +47,32 @@ export async function getOrCreateStripeCustomer(su: SessionUser): Promise<string
 }
 
 // ── Create checkout session ───────────────────────────────────
-export async function createCheckoutSession(su: SessionUser, returnUrl: string): Promise<string> {
+export async function createCheckoutSession(
+  su: SessionUser,
+  returnUrl: string,
+  period: 'monthly' | 'yearly' = 'monthly'
+): Promise<string> {
   const stripe = getStripe();
   const customerId = await getOrCreateStripeCustomer(su);
+
+  // Usa o priceId correto dependendo do período
+  const priceId = period === 'yearly'
+    ? (PLAN_PRO.priceIdYearly || PLAN_PRO.priceId)  // fallback para mensal se anual não configurado
+    : PLAN_PRO.priceId;
 
   const session = await stripe.checkout.sessions.create(
     {
       customer: customerId,
       mode: 'subscription',
-      line_items: [{ price: PLAN_PRO.priceId, quantity: 1 }],
+      line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${returnUrl}/planos?status=sucesso`,
       cancel_url: `${returnUrl}/planos?status=cancelado`,
       payment_method_types: ['card', 'boleto', 'pix'],
       subscription_data: { metadata: { userId: su.openid } },
-      metadata: { userId: su.openid },
+      metadata: { userId: su.openid, period },
       locale: 'pt-BR',
     },
-    { idempotencyKey: `checkout-${su.openid}-${Date.now()}` }
+    { idempotencyKey: `checkout-${su.openid}-${period}-${Date.now()}` }
   );
 
   if (!session.url) throw new Error('Checkout session URL not returned by Stripe');
