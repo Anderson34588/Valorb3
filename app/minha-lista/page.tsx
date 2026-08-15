@@ -1,13 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { BarChart2, Trash2, TrendingUp, TrendingDown, Minus, Bookmark } from 'lucide-react';
 import { AuthButton } from '@/components/AuthButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useWatchlist } from '@/hooks/useWatchlist';
-import { useSubscription } from '@/hooks/useSubscription';
 
 interface TickerSummary {
   ticker: string;
@@ -20,18 +18,9 @@ interface TickerSummary {
 }
 
 export default function MinhaListaPage() {
-  const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const { pro, loading: subLoading } = useSubscription();
   const { tickers, loading: wlLoading, remove } = useWatchlist();
   const [summaries, setSummaries] = useState<Record<string, TickerSummary>>({});
-
-  // Redireciona para /planos se não for Pro
-  useEffect(() => {
-    if (!subLoading && !pro) {
-      router.replace('/planos?motivo=pro');
-    }
-  }, [pro, subLoading, router]);
 
   // Busca o preço de cada ativo salvo
   useEffect(() => {
